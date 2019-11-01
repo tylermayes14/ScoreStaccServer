@@ -11,9 +11,7 @@ app.use(bodyParser.json());
 app.use(require('./middleware/headers'));
 app.use(require('./middleware/validateSession'));
 
-app.listen(3000, function(){
-    console.log('App is listening on 3000.');
-});
+app.listen(process.env.PORT, () => console.log(`app is listening on ${process.env.PORT}`));
 
 app.use('/scorestacc/user', require("./controllers/userController"));
 app.use('/scorestacc/login', require('./controllers/sessionController'));
