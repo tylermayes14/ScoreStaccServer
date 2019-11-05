@@ -1,27 +1,27 @@
-let jwt = require('jsonwebtoken');
-let sequelize = require('../db');
-let User = sequelize.import('../models/user');
-
-module.exports = function(req, res, next) {
-    let sessionToken = req.headers.authorization
-
-    if(!req.body.user && sessionToken) {
-        jwt.verify(sessionToken, 'Secret', function(err, decoded) {
-            if(decoded) {
-                User.findOne({where: {id: decoded.id}}).then(
-                    function(user) {
-                        req.user = user;
-                        next()
-                    },
-                    function() {
-                        res.status(401).send({error: "Not authorized"})
-                    }
-                )
-            } else {
-                res.status(401).send({error: "Not authorized"})
-            }
-        })
+const jwt = require('jsonwebtoken')
+const db = require('../db')
+const validateSession = (req, res, next) => {
+    if (req.method === "OPTIONS") {
+        next()
     } else {
-        next();
-    }
-}
+    const token = req.headers.authorization
+    jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
+        if (!err && decodedToken) {
+            db.users.findOne({
+                    where: {
+                        id: decodedToken.id
+                    }
+                }, console.log(decodedToken))
+                .then(user => {
+                    if (!user) throw 'err'
+                    req.user = user
+                    return next()
+                })
+                .catch(err => next(err))
+        } else {
+            req.errors = err
+            return res.status(500).send('Not authorized');
+        }
+    })
+}}
+module.exports = validateSession

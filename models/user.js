@@ -16,10 +16,6 @@ module.exports = (sequelize, DataTypes) => {
         password: {
             type: DataTypes.STRING,
             allowNull: false
-        },
-        skillLevel: {
-            type: DataTypes.ENUM('Beginner', 'Intermediate', 'Advanced'),
-            allowNull: false
         }
     })
     return User;

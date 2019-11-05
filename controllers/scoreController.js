@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const sequelize = require('../db.js');
 let user = sequelize.import('../models/user.js');
-let sheetMusic = sequelize.import('../models/sheetMusic.js');
+let sheetMusic = sequelize.import('../models/scores.js');
 
 router.get('/', (req, res) => {
     sheetMusic.findAll().then(
