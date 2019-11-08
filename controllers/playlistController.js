@@ -1,7 +1,6 @@
 const router = require('express').Router();
 const Playlist = require('../db').import('../models/playlist');
 
-
 // Get All
 router.get('/', (req, res) => {
     Playlist.findAll()
